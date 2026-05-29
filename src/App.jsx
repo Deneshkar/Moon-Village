@@ -7,10 +7,13 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import HomePage from './pages/public/HomePage'
 import MenuPage from './pages/public/MenuPage'
+import CartPage from './pages/public/CartPage'
 import CheckoutPage from './pages/public/CheckoutPage'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import OrderStatusPage from './pages/public/OrderStatusPage'
 import ReviewsPage from './pages/public/ReviewsPage'
+import ProtectedRoute from './components/ProtectedRoute'
+
 
 function App() {
   return (
@@ -25,9 +28,14 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/menu" element={<MenuPage />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/order-status/:orderId" element={<OrderStatusPage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

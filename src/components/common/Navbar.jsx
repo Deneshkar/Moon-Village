@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { FiShoppingCart, FiMenu, FiX, FiUser, FiLogOut } from 'react-icons/fi'
@@ -7,12 +7,22 @@ import { FiShoppingCart, FiMenu, FiX, FiUser, FiLogOut } from 'react-icons/fi'
 const Navbar = () => {
   const { user, isLoggedIn, isAdmin, logout } = useAuth()
   const { cartCount, setIsCartOpen } = useCart()
+  const location = useLocation()
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
     navigate('/login')
+  }
+
+  const handleCartClick = () => {
+    if (location.pathname === '/menu') {
+      setIsCartOpen(true)
+      return
+    }
+
+    navigate('/cart')
   }
 
   const navLinks = [
@@ -50,7 +60,7 @@ const Navbar = () => {
           {/* Cart - only for customers */}
           {isLoggedIn() && !isAdmin() && (
             <button
-              onClick={() => setIsCartOpen(true)}
+              onClick={handleCartClick}
               className="relative p-2 text-gray-300 hover:text-primary transition-colors"
             >
               <FiShoppingCart size={20} />
@@ -112,6 +122,15 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+          {isLoggedIn() && !isAdmin() && (
+            <Link
+              to="/cart"
+              onClick={() => setMobileOpen(false)}
+              className="block text-sm text-gray-300 hover:text-primary transition-colors py-1"
+            >
+              Cart
+            </Link>
+          )}
           {!isLoggedIn() && (
             <Link
               to="/login"

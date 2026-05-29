@@ -3,8 +3,13 @@ import { useCart } from '../../context/CartContext'
 import { useNavigate } from 'react-router-dom'
 
 const CartSidebar = () => {
-  const { cartItems, cartTotal, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart } = useCart()
+  const { cartItems, cartTotal, isCartOpen, setIsCartOpen, updateQuantity } = useCart()
   const navigate = useNavigate()
+
+  const handleViewCart = () => {
+    setIsCartOpen(false)
+    navigate('/cart')
+  }
 
   const handleCheckout = () => {
     setIsCartOpen(false)
@@ -16,9 +21,11 @@ const CartSidebar = () => {
   return (
     <>
       {/* Overlay */}
-      <div
+      <button
+        type="button"
         className="fixed inset-0 bg-black/50 z-40"
         onClick={() => setIsCartOpen(false)}
+        aria-label="Close cart sidebar"
       />
 
       {/* Sidebar */}
@@ -100,12 +107,20 @@ const CartSidebar = () => {
                 ${cartTotal.toFixed(2)}
               </span>
             </div>
-            <button
-              onClick={handleCheckout}
-              className="w-full bg-primary hover:bg-primary-light text-dark font-bold py-3 rounded-lg transition-all duration-200"
-            >
-              Checkout Now
-            </button>
+            <div className="space-y-3">
+              <button
+                onClick={handleViewCart}
+                className="w-full border border-dark-border text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:border-primary hover:text-primary"
+              >
+                View Full Cart
+              </button>
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-primary hover:bg-primary-light text-dark font-bold py-3 rounded-lg transition-all duration-200"
+              >
+                Checkout Now
+              </button>
+            </div>
           </div>
         )}
       </div>
