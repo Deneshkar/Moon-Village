@@ -165,7 +165,7 @@ const AdminMenuPage = () => {
 
       {/* ── Main Content ──────────────────────────────── */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminTopBar title="Admin Overview" />
+        <AdminTopBar title="Menu Management" />
 
         <div className="flex-1 overflow-y-auto p-8">
 

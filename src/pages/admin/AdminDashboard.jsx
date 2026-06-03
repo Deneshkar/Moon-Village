@@ -2,10 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   FiShoppingBag, FiDollarSign, FiClock,
-  FiStar, FiBell, FiRefreshCw, FiSearch
+  FiStar, FiCheck, FiMoreHorizontal
 } from 'react-icons/fi'
-import AdminSidebar from '../../components/admin/AdminSidebar'
-import { useAuth } from '../../context/AuthContext'
+import AdminSidebar, { AdminTopBar } from '../../components/admin/AdminSidebar'
 
 // ─── Mock Data ────────────────────────────────────────────────────
 const stats = [
@@ -118,16 +117,7 @@ const StatsCard = ({ stat }) => {
 
 // ─── Main Dashboard ───────────────────────────────────────────────
 const AdminDashboard = () => {
-  const { user } = useAuth()
   const [search, setSearch] = useState('')
-
-  const now = new Date()
-  const dateStr = now.toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
-  })
-
-  const hour = now.getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
     <div className="min-h-screen bg-dark font-poppins flex">
@@ -136,54 +126,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
 
-        {/* ── Top Bar ─────────────────────────────────── */}
-        <header className="sticky top-0 z-30 bg-dark/90 backdrop-blur border-b border-dark-border px-8 py-4 flex items-center justify-between">
-
-          {/* Greeting */}
-          <div>
-            <h1 className="text-white font-bold text-lg leading-tight">
-              {greeting}, Admin 👋
-            </h1>
-            <p className="text-gray-500 text-xs mt-0.5">{dateStr}</p>
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-3">
-            {/* Search */}
-            <div className="relative hidden md:block">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
-              <input
-                type="text"
-                placeholder="Search operations..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="bg-dark-card border border-dark-border text-white text-sm rounded-lg pl-9 pr-4 py-2 outline-none focus:border-primary transition-colors placeholder-gray-600 w-56"
-              />
-            </div>
-
-            {/* Bell */}
-            <button className="w-9 h-9 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center text-gray-400 hover:text-primary transition-colors relative">
-              <FiBell size={16} />
-              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
-            </button>
-
-            {/* History */}
-            <button className="w-9 h-9 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center text-gray-400 hover:text-primary transition-colors">
-              <FiRefreshCw size={16} />
-            </button>
-
-            {/* Shift Report */}
-            <button className="flex items-center gap-2 bg-dark-card border border-dark-border text-gray-300 text-sm font-medium px-4 py-2 rounded-lg hover:border-primary hover:text-primary transition-all">
-              <FiShoppingBag size={14} />
-              Shift Report
-            </button>
-
-            {/* Avatar */}
-            <div className="w-9 h-9 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center text-primary font-bold text-sm">
-              {user?.name?.charAt(0) || 'A'}
-            </div>
-          </div>
-        </header>
+        <AdminTopBar />
 
         {/* ── Page Body ───────────────────────────────── */}
         <main className="flex-1 overflow-y-auto p-8 space-y-8">

@@ -8,81 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import toast from 'react-hot-toast'
 
-// ─── Sidebar (Reviews page has slightly different sidebar) ────────
-const navItems = [
-  { label: 'Dashboard',  to: '/admin/dashboard', icon: '⊞' },
-  { label: 'Orders',     to: '/admin/orders',    icon: '🍴' },
-  { label: 'Floor Plan', to: '/admin/floorplan', icon: '⊟' },
-  { label: 'Menu',       to: '/admin/menu',      icon: '📖' },
-  { label: 'Reviews',    to: '/admin/reviews',   icon: '⊡' },
-  { label: 'Analytics',  to: '/admin/analytics', icon: '📊' },
-]
-
-const Sidebar = () => {
-  const { logout } = useAuth()
-  const navigate = useNavigate()
-
-  return (
-    <div className="w-56 min-h-screen bg-dark border-r border-dark-border flex flex-col flex-shrink-0">
-      {/* Brand */}
-      <div className="px-6 py-6 border-b border-dark-border">
-        <h1 className="text-primary font-black text-xl">Moon Village</h1>
-        <p className="text-gray-600 text-xs mt-0.5">Management Portal</p>
-      </div>
-
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {navItems.map(({ label, to, icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-dark-hover text-white border-r-2 border-primary'
-                  : 'text-gray-500 hover:text-gray-300 hover:bg-dark-hover'
-              }`
-            }
-          >
-            <span className="text-base">{icon}</span>
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Bottom */}
-      <div className="px-3 py-4 border-t border-dark-border space-y-0.5">
-        <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-500 hover:text-gray-300 hover:bg-dark-hover w-full">
-          <FiSettings size={15} /> Settings
-        </button>
-        <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-500 hover:text-gray-300 hover:bg-dark-hover w-full">
-          <FiHelpCircle size={15} /> Support
-        </button>
-      </div>
-    </div>
-  )
-}
-
-// ─── Top Bar ──────────────────────────────────────────────────────
-const TopBar = () => (
-  <div className="h-14 flex items-center justify-between px-8 border-b border-dark-border bg-dark-card/50">
-    <h1 className="text-white font-semibold text-base">Review Management</h1>
-    <div className="flex items-center gap-4">
-      <button className="text-gray-400 hover:text-primary transition-colors">
-        <FiBell size={18} />
-      </button>
-      <button className="text-gray-400 hover:text-primary transition-colors">
-        <FiClock size={18} />
-      </button>
-      <button className="text-gray-400 hover:text-primary transition-colors">
-        <FiUser size={18} />
-      </button>
-      <button className="flex items-center gap-2 bg-primary hover:bg-primary-light text-dark font-bold text-sm px-4 py-2 rounded-lg transition-all">
-        Shift Report
-      </button>
-    </div>
-  </div>
-)
+import AdminSidebar, { AdminTopBar } from '../../components/admin/AdminSidebar'
 
 // ─── Star Display ─────────────────────────────────────────────────
 const StarDisplay = ({ rating, size = 14 }) => (
@@ -282,10 +208,10 @@ const AdminReviewsPage = () => {
 
   return (
     <div className="flex min-h-screen bg-dark font-poppins">
-      <Sidebar />
+      <AdminSidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <TopBar />
+        <AdminTopBar title="Review Management" />
 
         <div className="flex-1 overflow-y-auto p-8">
 

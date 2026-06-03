@@ -242,7 +242,7 @@ const AdminOrdersPage = () => {
       <AdminSidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminTopBar title="Admin Overview" />
+        <AdminTopBar title="Order Management" />
 
         <div className="flex-1 overflow-y-auto p-8">
 

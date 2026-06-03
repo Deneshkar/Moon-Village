@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   FiGrid, FiList, FiShoppingBag,
-  FiMessageSquare, FiSettings, FiLogOut, FiBell
+  FiMessageSquare, FiSettings, FiLogOut, FiBell, FiSearch, FiRefreshCw
 } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 
@@ -14,29 +14,58 @@ const navItems = [
 ]
 
 // ─── Top Bar ──────────────────────────────────────────────────────
-export const AdminTopBar = ({ title }) => {
+export const AdminTopBar = ({ title, subTitle }) => {
   const { user } = useAuth()
+  const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' }
+  const dateStr = new Date().toLocaleDateString('en-US', dateOptions)
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+
   return (
-    <div className="h-14 flex items-center justify-between px-8 border-b border-dark-border bg-dark-card/50">
-      <h1 className="text-white font-bold text-lg">{title}</h1>
-      <div className="flex items-center gap-4">
-        <button className="relative text-gray-400 hover:text-primary transition-colors">
-          <FiBell size={18} />
-          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary text-dark text-[9px] font-bold rounded-full flex items-center justify-center">
-            3
-          </span>
+    <header className="sticky top-0 z-30 bg-dark/90 backdrop-blur border-b border-dark-border px-8 py-4 flex items-center justify-between">
+      {/* Greeting or Title */}
+      <div>
+        <h1 className="text-white font-bold text-lg leading-tight">
+          {title ? title : `${greeting}, ${user?.name || 'Admin'} 👋`}
+        </h1>
+        <p className="text-gray-500 text-xs mt-0.5">{subTitle || (title ? 'Moon Village Management' : dateStr)}</p>
+      </div>
+
+      {/* Right side */}
+      <div className="flex items-center gap-3">
+        {/* Search */}
+        <div className="relative hidden md:block">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+          <input
+            type="text"
+            placeholder="Search operations..."
+            className="bg-dark-card border border-dark-border text-white text-sm rounded-lg pl-9 pr-4 py-2 outline-none focus:border-primary transition-colors placeholder-gray-600 w-56"
+          />
+        </div>
+
+        {/* Bell */}
+        <button className="w-9 h-9 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center text-gray-400 hover:text-primary transition-colors relative">
+          <FiBell size={16} />
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full" />
         </button>
-        <div className="flex items-center gap-2">
-          <div className="text-right">
-            <p className="text-white text-xs font-semibold">Admin User</p>
-            <p className="text-gray-500 text-[10px] uppercase tracking-wider">Superuser</p>
-          </div>
-          <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary text-xs font-bold">
-            A
-          </div>
+
+        {/* History */}
+        <button className="w-9 h-9 bg-dark-card border border-dark-border rounded-lg flex items-center justify-center text-gray-400 hover:text-primary transition-colors">
+          <FiRefreshCw size={16} />
+        </button>
+
+        {/* Shift Report */}
+        <button className="flex items-center gap-2 bg-dark-card border border-dark-border text-gray-300 text-sm font-medium px-4 py-2 rounded-lg hover:border-primary hover:text-primary transition-all">
+          <FiShoppingBag size={14} />
+          <span>Shift Report</span>
+        </button>
+
+        {/* Avatar */}
+        <div className="w-9 h-9 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center text-primary font-bold text-sm ml-2">
+          {user?.name?.charAt(0).toUpperCase() || 'A'}
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
