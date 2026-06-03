@@ -134,7 +134,7 @@ const AdminDashboard = () => {
       <AdminSidebar />
 
       {/* Main Content */}
-      <div className="flex-1 ml-56 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
 
         {/* ── Top Bar ─────────────────────────────────── */}
         <header className="sticky top-0 z-30 bg-dark/90 backdrop-blur border-b border-dark-border px-8 py-4 flex items-center justify-between">
@@ -186,7 +186,7 @@ const AdminDashboard = () => {
         </header>
 
         {/* ── Page Body ───────────────────────────────── */}
-        <main className="flex-1 p-8 space-y-8">
+        <main className="flex-1 overflow-y-auto p-8 space-y-8">
 
           {/* Stats Row */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">

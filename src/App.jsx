@@ -13,6 +13,10 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import OrderStatusPage from './pages/public/OrderStatusPage'
 import ReviewsPage from './pages/public/ReviewsPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminMenuPage from './pages/admin/AdminMenuPage'
+import AdminOrdersPage from './pages/admin/AdminOrdersPage'
+import AdminReviewsPage from './pages/admin/AdminReviewsPage'
+
 
 
 function App() {
@@ -36,6 +40,21 @@ function App() {
                 <AdminDashboard />
               </ProtectedRoute>
             } />
+            <Route path="/admin/menu" element={
+  <ProtectedRoute requiredRole="admin">
+    <AdminMenuPage />
+  </ProtectedRoute>
+} />
+            <Route path="/admin/orders" element={
+  <ProtectedRoute requiredRole="admin">
+    <AdminOrdersPage />
+  </ProtectedRoute>
+} />
+            <Route path="/admin/reviews" element={
+  <ProtectedRoute requiredRole="admin">
+    <AdminReviewsPage />
+  </ProtectedRoute>
+} />
             <Route path="/order-status/:orderId" element={<OrderStatusPage />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

@@ -1,97 +1,95 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
-  FiGrid, FiShoppingBag, FiMap, FiBook,
-  FiBarChart2, FiSettings, FiHelpCircle,
-  FiPlusCircle, FiLogOut
+  FiGrid, FiList, FiShoppingBag,
+  FiMessageSquare, FiSettings, FiLogOut, FiBell
 } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 
 const navItems = [
-  { label: 'Dashboard', icon: FiGrid,      to: '/admin/dashboard' },
-  { label: 'Orders',    icon: FiShoppingBag, to: '/admin/orders'   },
-  { label: 'Floor Plan',icon: FiMap,       to: '/admin/dashboard' },
-  { label: 'Menu',      icon: FiBook,      to: '/admin/menu'      },
-  { label: 'Analytics', icon: FiBarChart2, to: '/admin/dashboard' },
+  { label: 'Dashboard',        to: '/admin/dashboard', icon: FiGrid        },
+  { label: 'Menu Management',  to: '/admin/menu',      icon: FiList        },
+  { label: 'Order Management', to: '/admin/orders',    icon: FiShoppingBag },
+  { label: 'Reviews',          to: '/admin/reviews',   icon: FiMessageSquare },
+  { label: 'Settings',         to: '/admin/settings',  icon: FiSettings    },
 ]
 
-const bottomItems = [
-  { label: 'Settings', icon: FiSettings,   to: '/admin/dashboard' },
-  { label: 'Support',  icon: FiHelpCircle, to: '/admin/dashboard' },
-]
+// ─── Top Bar ──────────────────────────────────────────────────────
+export const AdminTopBar = ({ title }) => {
+  const { user } = useAuth()
+  return (
+    <div className="h-14 flex items-center justify-between px-8 border-b border-dark-border bg-dark-card/50">
+      <h1 className="text-white font-bold text-lg">{title}</h1>
+      <div className="flex items-center gap-4">
+        <button className="relative text-gray-400 hover:text-primary transition-colors">
+          <FiBell size={18} />
+          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-primary text-dark text-[9px] font-bold rounded-full flex items-center justify-center">
+            3
+          </span>
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <p className="text-white text-xs font-semibold">Admin User</p>
+            <p className="text-gray-500 text-[10px] uppercase tracking-wider">Superuser</p>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary text-xs font-bold">
+            A
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
+// ─── Sidebar ──────────────────────────────────────────────────────
 const AdminSidebar = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
   const { logout } = useAuth()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     logout()
     navigate('/login')
   }
 
-  const isActive = (path) => location.pathname === path
-
   return (
-    <aside className="fixed top-0 left-0 h-full w-56 bg-[#0d1117] border-r border-dark-border flex flex-col z-40">
+    <div className="w-52 min-h-screen bg-dark border-r border-dark-border flex flex-col flex-shrink-0">
 
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-dark-border">
-        <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-dark font-black text-lg">
-          🌙
-        </div>
-        <div>
-          <p className="text-white font-bold text-sm leading-tight">Moon Village</p>
-          <p className="text-gray-600 text-xs">Management Portal</p>
-        </div>
+      {/* Brand */}
+      <div className="px-6 py-6 border-b border-dark-border">
+        <h1 className="text-primary font-black text-xl leading-tight">Moon Village</h1>
+        <p className="text-gray-600 text-xs mt-0.5">Celestial Admin</p>
       </div>
 
-      {/* Main Nav */}
-      <nav className="flex-1 px-3 py-5 space-y-1">
-        {navItems.map(({ label, icon: Icon, to }) => (
-          <Link
-            key={label}
+      {/* Nav Links */}
+      <nav className="flex-1 px-3 py-4 space-y-1">
+        {navItems.map(({ label, to, icon: Icon }) => (
+          <NavLink
+            key={to}
             to={to}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              isActive(to)
-                ? 'bg-primary/10 text-primary border-l-2 border-primary pl-3'
-                : 'text-gray-500 hover:text-white hover:bg-dark-hover'
-            }`}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-primary/10 text-primary border-r-2 border-primary'
+                  : 'text-gray-400 hover:text-white hover:bg-dark-hover'
+              }`
+            }
           >
-            <Icon size={17} />
+            <Icon size={16} />
             {label}
-          </Link>
+          </NavLink>
         ))}
       </nav>
 
-      {/* New Reservation Button */}
-      <div className="px-4 pb-4">
-        <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-light text-dark font-semibold py-2.5 rounded-lg text-sm transition-all duration-200">
-          <FiPlusCircle size={15} />
-          New Reservation
-        </button>
-      </div>
-
-      {/* Bottom Nav */}
-      <div className="px-3 pb-3 space-y-1 border-t border-dark-border pt-3">
-        {bottomItems.map(({ label, icon: Icon, to }) => (
-          <Link
-            key={label}
-            to={to}
-            className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-white hover:bg-dark-hover transition-all"
-          >
-            <Icon size={17} />
-            {label}
-          </Link>
-        ))}
+      {/* Logout */}
+      <div className="px-3 py-4 border-t border-dark-border">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-red-400 hover:bg-dark-hover transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-red-400/10 transition-all w-full"
         >
-          <FiLogOut size={17} />
+          <FiLogOut size={16} />
           Logout
         </button>
       </div>
-    </aside>
+    </div>
   )
 }
 
