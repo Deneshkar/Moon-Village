@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import {
   FiShoppingBag, FiDollarSign, FiClock,
-  FiStar, FiCheck, FiMoreHorizontal
+  FiStar
 } from 'react-icons/fi'
 import AdminSidebar, { AdminTopBar } from '../../components/admin/AdminSidebar'
 
@@ -118,6 +119,14 @@ const StatsCard = ({ stat }) => {
 // ─── Main Dashboard ───────────────────────────────────────────────
 const AdminDashboard = () => {
   const [search, setSearch] = useState('')
+  const filteredRecentOrders = recentOrders.filter(order => {
+    const query = search.trim().toLowerCase()
+    if (!query) return true
+
+    return [order.id, order.customer, order.items, order.total, order.status].some(field =>
+      field.toLowerCase().includes(query)
+    )
+  })
 
   return (
     <div className="min-h-screen bg-dark font-poppins flex">
@@ -126,7 +135,12 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
 
-        <AdminTopBar />
+        <AdminTopBar
+          searchValue={search}
+          onSearchChange={setSearch}
+          onSearchSubmit={value => setSearch(value)}
+          searchPlaceholder="Search orders, customers, or status..."
+        />
 
         {/* ── Page Body ───────────────────────────────── */}
         <main className="flex-1 overflow-y-auto p-8 space-y-8">
@@ -171,7 +185,7 @@ const AdminDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-dark-border">
-                    {recentOrders.map(order => (
+                    {filteredRecentOrders.map(order => (
                       <tr key={order.id} className="hover:bg-dark-hover transition-colors">
                         <td className="px-6 py-4 text-primary text-sm font-medium">{order.id}</td>
                         <td className="px-6 py-4 text-gray-300 text-sm">{order.customer}</td>
@@ -190,6 +204,11 @@ const AdminDashboard = () => {
                     ))}
                   </tbody>
                 </table>
+                {filteredRecentOrders.length === 0 && (
+                  <div className="px-6 py-10 text-center text-gray-500 text-sm border-t border-dark-border">
+                    No recent orders match your search.
+                  </div>
+                )}
               </div>
             </div>
 
@@ -201,7 +220,7 @@ const AdminDashboard = () => {
               {/* Bar Chart */}
               <div className="flex items-end justify-between gap-2 flex-1 mb-4">
                 {weekDays.map((day, i) => (
-                  <div key={i} className="flex flex-col items-center gap-2 flex-1">
+                  <div key={`${day}-${barHeights[i]}`} className="flex flex-col items-center gap-2 flex-1">
                     <div
                       className={`w-full rounded-t-sm transition-all duration-500 ${
                         i === 4 ? 'bg-primary' : 'bg-dark-border'
@@ -256,3 +275,18 @@ const AdminDashboard = () => {
 }
 
 export default AdminDashboard
+
+StatusBadge.propTypes = {
+  status: PropTypes.oneOf(['pending', 'preparing', 'ready', 'completed']).isRequired,
+}
+
+StatsCard.propTypes = {
+  stat: PropTypes.shape({
+    icon: PropTypes.elementType.isRequired,
+    badge: PropTypes.string,
+    badgeColor: PropTypes.string,
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    valueColor: PropTypes.string,
+  }).isRequired,
+}
